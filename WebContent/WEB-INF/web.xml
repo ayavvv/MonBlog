@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- Web 应用名称：提供GUI工具可能会用来标记这个特定的Web应用的一个名称 -->
+	<display-name>MonBlog</display-name>
+
+	<!-- Web应用图标：指出IDE和GUI工具用来表示Web应用的大图标和小图标 -->
+	<icon>
+		<small-icon>/img/app_small.gif</small-icon>
+		<large-icon>/img/app_large.gif</large-icon>
+	</icon>
+
+	<!-- Web 应用描述： 给出于此相关的说明性文本 -->
+	<description>A blog web application </description>
+
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<!--servlet配置 -->
+	<servlet>
+		<servlet-name>bb</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<!-- 导入spring的配置文件与mybatis的配置文件 -->
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:applicationContext.xml, WEB-INF/bb-servlet.xml</param-value>
+		</init-param>
+
+		<!-- 指定当Web应用启动时，装载Servlet的次序。 当值为正数或零时：Servlet容器先加载数值小的servlet，再依次加载其他数值大的servlet. 
+			当值为负或未定义：Servlet容器将在Web客户首次访问这个servlet时加载它 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping><!-- 用来定义servlet所对应的URL，包含两个子元素 -->
+		<servlet-name>bb</servlet-name><!-- 指定servlet的名称 -->
+		<url-pattern>/</url-pattern><!-- 指定servlet所对应的URL -->
+	</servlet-mapping>
+
+	<!-- 会话超时配置（单位为分钟） -->
+	<session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+
+	<!-- 通过错误码来配置error-page,当系统发生404错误时，跳转到错误处理页面NotFound.jsp -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/jsp/NotFound.jsp</location>
+	</error-page>
+
+	<!-- 对客户端请求的静态资源如图片、JS文件等的请求交由默认的servlet进行处理 -->
+	<!-- http://blog.csdn.net/wxwzy738/article/details/19072909 -->
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.css</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.gif</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.ico</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.png</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.jpg</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.jpeg</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.bmp</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.php</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.swf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.pdf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.docx</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.doc</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.rar</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.zip</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.txt</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.wmv</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.map</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.mp3</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.ape</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.flac</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.wma</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.eto</url-pattern>
+	</servlet-mapping>
+	
+
+</web-app>
