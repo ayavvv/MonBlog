@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.buaa.springmvc.dao.Blog;
@@ -13,7 +14,9 @@ import com.buaa.springmvc.service.MessageService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,25 +31,30 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+    @RequestMapping("message.do")
+    public @ResponseBody
+    Map<String, Object> save(HttpServletRequest request, String name, String content, String code) {
 
-//发送消息，使用的不是javascript
-    @RequestMapping(value = "message", method = RequestMethod.POST)
-    public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
-        Msg message1 = new Msg();
-        message1.setAuthor(request.getParameter("author"));
-        message1.setContent(request.getParameter("content"));
-        System.out.println(message1);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = format.format(new Date());
-        String id = "index";
-        ModelAndView mv = new ModelAndView("redirect:" + id);
-        message1.setDate(date);
-        messageService.createAMessage(message1);
-        List<Blog> blogs = blogService.getAllBlog();
-        List<Msg> messages = messageService.getAllMessage();
-        mv.addObject("blogs", blogs);
-        mv.addObject("messages", messages);
-        return mv;
+        //从session中获取系统生成的验证码
+        String kaptchaExpected = (String) request.getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
+
+        //进行比较
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        if (code.equals(kaptchaExpected)) {
+            Msg message1 = new Msg();
+            message1.setAuthor(name);
+            message1.setContent(content);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = format.format(new Date());
+            String id = "index";
+            message1.setDate(date);
+            messageService.createAMessage(message1);
+            map.put("msg", "true");
+        } else {
+            map.put("msg", "false");
+        }
+        return map;
     }
 
     @RequestMapping(value = "messages")

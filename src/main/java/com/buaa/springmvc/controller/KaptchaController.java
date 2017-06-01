@@ -52,25 +52,4 @@ public class KaptchaController {
         }
         return null;
     }
-
-    @RequestMapping("/checkCode.do")
-    public @ResponseBody
-    Map<String, Object> save(HttpServletRequest request, HttpServletResponse response) {
-        //查询时可以使用 isNotNull
-        String submitCode;
-        submitCode = request.getParameter("name");
-
-        //从session中获取系统生成的验证码
-        String kaptchaExpected = (String) request.getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
-
-        //进行比较
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        if (submitCode.equals(kaptchaExpected)) {
-            map.put("msg", "true");
-        } else {
-            map.put("msg", "false");
-        }
-        return map;
-    }
 }  

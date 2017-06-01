@@ -35,8 +35,9 @@
                 alert("验证码不能为空呦");
                 return false;
             }
-            validateCode();
+            validateCode(author,content,code);
             if (r) {
+                location.reload();
                 return true;
             } else {
                 alert("验证码错误");
@@ -58,12 +59,18 @@
             $('#kaptchaImage').hide().attr('src', '<%=path%>/captcha-image?' + Math.floor(Math.random() * 100)).fadeIn();
             event.cancelBubble = true;
         }
-        function validateCode() {
+        function validateCode(name,content,code) {
+            var user = {
+                name:name,
+                content:content,
+                code:code
+            };
+
             $.ajax({
-                data: "name=" + $("#kaptcha").val(),
+                data: user,
                 type: "post",
                 dataType: 'json',
-                url: "checkCode.do",
+                url: "message.do",
                 async:false,
                 error: function (data) {
                     alert("网络错误，请重试" );
@@ -171,14 +178,13 @@
         </div>
         <!-- 留言提交 -->
         <div class="col-lg-10 col-md-10">
-            <form action="message" method="post"
-                  onsubmit="return validate_message(this)">
+            <form onsubmit="return validate_message(this);">
                 <div class="row control-group">
                     <div
                             class="form-group col-xs-12 floating-label-form-group controls">
                         <label>昵称</label>
                         <!-- 未显示 floating-label-form-group 控制-->
-                        <input type="text" class="form-control" name="author"
+                        <input type="text" class="form-control" name="author" id="mesname"
                                placeholder="昵称"/>
                     </div>
                 </div>
@@ -186,7 +192,7 @@
 
                     <div
                             class="form-group col-xs-12 floating-label-form-group controls">
-                        <label>留言</label> <input type="text" class="form-control"
+                        <label>留言</label> <input type="text" class="form-control" id="mescontent"
                                                  name="content" placeholder="留言"/>
                     </div>
                 </div>
@@ -213,7 +219,7 @@
                 <div class="row">
                     <div class="form-group col-xs-12">
                         <a href="index">
-                            <button type="submit" class="btn btn-default">COMMIT</button>
+                            <button type="submit" class="btn btn-default" >COMMIT</button>
                         </a>
                     </div>
                 </div>
