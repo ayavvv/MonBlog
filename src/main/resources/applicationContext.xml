@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- spring mybatis 的基本配置 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 导入外部配置文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+
+	<!-- 配置数据源 DriverManagerDataSource -->
+	<!-- 此处配置数据源有三种方式，http://blog.csdn.net/yangyz_love/article/details/8199207 -->
+	<!-- 下面为方法一，只是建立了一个connection，根本没有连接池的作用 -->
+	<!--
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="username" value="${user}" />
+		<property name="password" value="${password}" />
+		<property name="driverClassName" value="${driverClass}" />
+		<property name="url" value="${jdbcUrl}" />
+	</bean>
+	  -->
+	<!-- 下面为方法二，这是一种推荐说明的数据源配置方式，它真正使用了连接池技术 -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${driverClass}" />
+		<property name="url" value="${jdbcUrl}" />
+		<property name="username" value="${user}" />
+		<property name="password" value="${password}" />
+
+		<property name="initialSize" value="${initialSize}"></property>
+
+		<property name="maxActive" value="${maxActive}"></property>
+
+		<property name="maxIdle" value="${maxIdle}"></property>
+
+		<property name="minIdle" value="${minIdle}"></property>
+
+		<property name="maxWait" value="${maxWait}"></property>
+	</bean>
+
+	<!-- 配置mybatis的SqlSession工厂 SqlSessionFactoryBean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.buaa.springmvc" />  <!-- 实体类包名，自动将实体类的简单类名映射成为别名 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml" />
+	</bean>
+
+	<!-- mapper beans -->
+	<bean id="blogDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.buaa.springmvc.dao.BlogDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<bean id="messageDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.buaa.springmvc.dao.MessageDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+		<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.buaa.springmvc.dao.UserDao" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+</beans>
